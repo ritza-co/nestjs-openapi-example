@@ -23,7 +23,7 @@ To install the application on your local machine:
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/speakeasy-api/speakeasy-nestjs-example.git
+git clone https://github.com/speakeasy-api/nestjs-openapi-example.git
 ```
 
 2. Navigate into the directory:
