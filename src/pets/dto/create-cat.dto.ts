@@ -1,4 +1,4 @@
-import { IsEnum, IsInt, IsString } from 'class-validator';
+import { IsEnum, IsIn, IsInt, IsString } from 'class-validator';
 import { CatEnvironment } from '../pets.types';
 
 export class CreateCatDto {
