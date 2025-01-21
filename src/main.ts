@@ -66,6 +66,10 @@ async function bootstrap() {
   // Save the YAML document to a file
   writeFileSync('openapi.yaml', yamlString);
 
+  SwaggerModule.setup('api', app, document, {
+    swaggerUiEnabled: false,
+  });
+
   app.use(
     '/api',
     apiReference({
