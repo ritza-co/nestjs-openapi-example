@@ -3,12 +3,13 @@
  */
 
 import { SDKCore } from "../core.js";
-import { encodeJSON } from "../lib/encodings.js";
+import { encodeSimple } from "../lib/encodings.js";
 import * as M from "../lib/matchers.js";
 import { compactMap } from "../lib/primitives.js";
 import { safeParse } from "../lib/schemas.js";
 import { RequestOptions } from "../lib/sdks.js";
 import { pathToFunc } from "../lib/url.js";
+import * as components from "../models/components/index.js";
 import { APIError } from "../models/errors/apierror.js";
 import {
   ConnectionError,
@@ -22,15 +23,15 @@ import * as operations from "../models/operations/index.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Create pet
+ * Get dog
  */
-export async function petsCreate(
+export async function petsFindOneDog(
   client: SDKCore,
-  request: operations.CreateRequestBody,
+  request: operations.FindOneDogRequest,
   options?: RequestOptions,
 ): Promise<
   Result<
-    operations.CreateResponse,
+    components.Dog,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -42,24 +43,30 @@ export async function petsCreate(
 > {
   const parsed = safeParse(
     request,
-    (value) => operations.CreateRequestBody$outboundSchema.parse(value),
+    (value) => operations.FindOneDogRequest$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
     return parsed;
   }
   const payload = parsed.value;
-  const body = encodeJSON("body", payload, { explode: true });
+  const body = null;
 
-  const path = pathToFunc("/pets")();
+  const pathParams = {
+    id: encodeSimple("id", payload.id, {
+      explode: false,
+      charEncoding: "percent",
+    }),
+  };
+
+  const path = pathToFunc("/pets/dogs/{id}")(pathParams);
 
   const headers = new Headers(compactMap({
-    "Content-Type": "application/json",
     Accept: "application/json",
   }));
 
   const context = {
-    operationID: "create",
+    operationID: "findOneDog",
     oAuth2Scopes: [],
 
     resolvedSecurity: null,
@@ -70,8 +77,8 @@ export async function petsCreate(
       || {
         strategy: "backoff",
         backoff: {
-          initialInterval: 1000,
-          maxInterval: 80000,
+          initialInterval: 500,
+          maxInterval: 60000,
           exponent: 1.5,
           maxElapsedTime: 3600000,
         },
@@ -82,7 +89,7 @@ export async function petsCreate(
   };
 
   const requestRes = client._createRequest(context, {
-    method: "POST",
+    method: "GET",
     baseURL: options?.serverURL,
     path: path,
     headers: headers,
@@ -96,7 +103,7 @@ export async function petsCreate(
 
   const doResult = await client._do(req, {
     context,
-    errorCodes: ["400", "403", "4XX", "5XX"],
+    errorCodes: ["400", "4XX", "5XX"],
     retryConfig: context.retryConfig,
     retryCodes: context.retryCodes,
   });
@@ -106,7 +113,7 @@ export async function petsCreate(
   const response = doResult.value;
 
   const [result] = await M.match<
-    operations.CreateResponse,
+    components.Dog,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -115,9 +122,8 @@ export async function petsCreate(
     | RequestTimeoutError
     | ConnectionError
   >(
-    M.json(200, operations.CreateResponse$inboundSchema),
-    M.json(201, operations.CreateResponse$inboundSchema),
-    M.fail([400, 403, "4XX"]),
+    M.json(200, components.Dog$inboundSchema),
+    M.fail([400, "4XX"]),
     M.fail("5XX"),
   )(response);
   if (!result.ok) {
