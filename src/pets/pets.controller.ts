@@ -22,7 +22,6 @@ export class PetsController {
   constructor(private readonly petsService: PetsService) {}
 
   @Post()
-  @ApiTags('pets')
   @ApiOperation({ summary: 'Create pet' })
   @ApiBody({
     schema: {

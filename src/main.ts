@@ -25,7 +25,7 @@ async function bootstrap() {
     .setTitle('Pet API')
     .setDescription('Create a cat or dog record and view pets by id')
     .setVersion('1.0')
-    .addTag('pets', 'Pets operations', {
+    .addTag('Pets', 'Pets operations', {
       url: 'https://example.com/api',
       description: 'Operations API endpoint',
     })

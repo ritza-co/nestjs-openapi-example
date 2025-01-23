@@ -35,7 +35,6 @@ paths:
       summary: Create pet
       tags:
         - Pets
-        - pets
       x-speakeasy-retries:
         strategy: backoff
         backoff:
@@ -103,7 +102,7 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
 tags:
-  - name: pets
+  - name: Pets
     description: Pets operations
     externalDocs:
       url: https://example.com/api
