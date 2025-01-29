@@ -19,27 +19,27 @@ To generate an SDK, you'll also need to [install the Speakeasy CLI](https://gith
 
 ## Installation
 
-To install the application on your local machine:
+Install the application on your local machine.
 
-- Clone the repository.
+- Clone the repository:
 
   ```bash
   git clone https://github.com/speakeasy-api/nestjs-openapi-example.git
   ```
 
-- Navigate into the directory.
+- Navigate into the directory:
 
   ```bash
   cd speakeasy-nestjs-example
   ```
 
- - Install all the dependencies for the application using npm.
+ - Install all the dependencies for the application using npm:
 
   ```bash
   npm install
   ```
 
-- Install the Speakeasy CLI.
+- Install the Speakeasy CLI:
 
   ```bash
   brew install speakeasy-api/homebrew-tap/speakeasy
